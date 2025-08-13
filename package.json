@@ -12,6 +12,6 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^5.1.0",
-    "tigerbeetle-node": "^0.16.54"
+    "tigerbeetle-node": "0.16.53"
   }
 }
