@@ -1,9 +1,8 @@
 // tigerbeetle-bridge.js (Node.js service)
-// import express from "express";
 const express = require("express");
 const { createClient } = require("tigerbeetle-node");
-
-// import { createClient } from "tigerbeetle-node";
+const { v7 } = require("uuid");
+// const { uuidToBigInt } = require("./helper");
 
 const app = express();
 app.use(express.json());
@@ -16,10 +15,19 @@ const client = createClient({
 
 // Create accounts endpoint
 app.post("/accounts", async (req, res) => {
-  console.log("Body: ", req.body);
+  // console.log("Body: ", req.body);
   try {
+    const id = v7();
+    console.log(typeof id);
+    console.log("Generated ID: ", id);
+
+    const hex = id.replace(/-/g, "");
+    console.log(`Account ID: ${hex}`);
+
+    const acc_id = BigInt("0x" + hex);
+
     const accounts = req.body.map((acc) => ({
-      id: BigInt(acc.id),
+      id: acc_id,
       debits_pending: 0n,
       debits_posted: 0n,
       credits_pending: 0n,
@@ -34,8 +42,18 @@ app.post("/accounts", async (req, res) => {
       timestamp: 0n,
     }));
 
-    const result = await client.createAccounts(accounts);
-    res.json({ success: result.length === 0, errors: result });
+    // console.log("payloads: ", accounts);
+    return res.json({
+      success: "true",
+    });
+
+    // return accounts;
+
+    // const result = await client.createAccounts(accounts);
+    // res.json({
+    //   success: result.length === 0,
+    //   errors: result,
+    // });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

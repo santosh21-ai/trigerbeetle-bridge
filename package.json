@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^5.1.0",
-    "tigerbeetle-node": "0.16.53"
+    "tigerbeetle-node": "0.16.53",
+    "uuid": "^11.1.0"
   }
 }
