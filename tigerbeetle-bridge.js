@@ -17,6 +17,15 @@ const client = createClient({
 app.post("/accounts", async (req, res) => {
   // console.log("Body: ", req.body);
   try {
+    if (!Array.isArray(req.body) || req.body.length === 0) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: "Invalid request body. Expected an array of accounts.",
+        });
+    }
+
     const id = v7();
     console.log(typeof id);
     console.log("Generated ID: ", id);
@@ -43,17 +52,18 @@ app.post("/accounts", async (req, res) => {
     }));
 
     // console.log("payloads: ", accounts);
-    return res.json({
-      success: "true",
-    });
+    // return res.json({
+    //   success: "true",
+    // });
 
     // return accounts;
 
-    // const result = await client.createAccounts(accounts);
-    // res.json({
-    //   success: result.length === 0,
-    //   errors: result,
-    // });
+    const result = await client.createAccounts(accounts);
+    res.json({
+      success: result.length === 0,
+      errors: result,
+      tigger_beetle_acc_id: acc_id,
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
